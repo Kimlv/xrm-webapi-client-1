@@ -37,16 +37,16 @@ var credentials = new ClientCredentials("e8b89848-be54-4a01-b953-022a164016ce", 
 ```
 ```CSharp
 // Initialize and connect
-XrmWebApiClient xrmClient =
-    await XrmWebApiClient.ConnectAsync(serviceRootUri, credentials, tenant);
+XrmWebApiClient client = await XrmWebApiClient
+    .ConnectAsync(serviceRootUri, credentials, tenant);
 ```
 
 3.  Use OData system queries to communicate with the Xrm Web Api
 
 ```CSharp
 // Get all active accounts
-List<Account> accounts =
-    await RetrieveMultipleAsync<Account>("?$select=accountid&$filter=statecode eq 0");
+List<Account> accounts = await client
+    .RetrieveMultipleAsync<Account>("?$select=accountid&$filter=statecode eq 0");
 ```
 
 ## Tests
