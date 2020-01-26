@@ -18,7 +18,7 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Retrieve")]
         [TestCategory("Positive")]
-        public async Task RetrieveMultipleAsync_Top3Contacts_ShouldReturn3Results()
+        public async Task RetrieveMultipleAsync_Top3_ShouldReturn3Results()
         {
             var options = "?$top=3";
             var contacts = await _xrmWebApiClient.RetrieveMultipleAsync<Contact>(options);
@@ -29,7 +29,7 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Retrieve")]
         [TestCategory("Positive")]
-        public async Task RetrieveMultipleAsync_SelecContactIdFromTop3Contacts_ShouldReturn3ResultsWithContactId()
+        public async Task RetrieveMultipleAsync_SelectIdFromTop3_ShouldReturn3ResultsWithId()
         {
             var options = "?$select=contactid&$top=3";
             var contacts = await _xrmWebApiClient.RetrieveMultipleAsync<Contact>(options);
@@ -43,7 +43,7 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Retrieve")]
         [TestCategory("Negative")]
-        public async Task RetrieveMultipleAsync_WhenContactIdEqualsNonExistentId_ShouldReturnNoResults()
+        public async Task RetrieveMultipleAsync_WhenIdEqualsNonExistentId_ShouldReturnNoResults()
         {
             var options = "?$filter=contactid eq 00000000-0000-0000-0000-000000000000";
             var contacts = await _xrmWebApiClient.RetrieveMultipleAsync<Contact>(options);
@@ -66,9 +66,9 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Retrieve")]
         [TestCategory("Positive")]
-        public async Task RetrieveAsync_Contact_ShouldReturnResult()
+        public async Task RetrieveAsync_Record_ShouldReturnResult()
         {
-            var contact = await _xrmWebApiClient.RetrieveAsync<Contact>(_contactId);
+            var contact = await _xrmWebApiClient.RetrieveAsync<Contact>(_recordId);
 
             Assert.IsNotNull(contact);
         }
@@ -76,10 +76,10 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Retrieve")]
         [TestCategory("Positive")]
-        public async Task RetrieveAsync_SelectContactIdFromContact_ShouldReturnResultWithContactId()
+        public async Task RetrieveAsync_SelectIdFromRecord_ShouldReturnResultWithId()
         {
             var options = "?$select=contactid";
-            var contact = await _xrmWebApiClient.RetrieveAsync<Contact>(_contactId, options);
+            var contact = await _xrmWebApiClient.RetrieveAsync<Contact>(_recordId, options);
 
             Assert.IsNotNull(contact);
             Assert.IsNotNull(contact!.ContactId);
@@ -88,7 +88,7 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Retrieve")]
         [TestCategory("Negative")]
-        public async Task RetrieveAsync_WhenContactIdEqualsNonExistentId_ShouldThrowXrmWebApiException()
+        public async Task RetrieveAsync_WhenIdEqualsNonExistentId_ShouldThrowXrmWebApiException()
         {
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
             {
@@ -105,7 +105,7 @@ namespace Xrm.WebApi.Tests
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
             {
                 var options = "?$invalid_option";
-                await _xrmWebApiClient.RetrieveAsync<Contact>(_contactId, options);
+                await _xrmWebApiClient.RetrieveAsync<Contact>(_recordId, options);
             });
         }
     }

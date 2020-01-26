@@ -17,12 +17,12 @@ namespace Xrm.WebApi.Tests
     {
         private XrmWebApiClient _xrmWebApiClient;
 
-        private string _resourceUri;
+        private string _serviceRoot;
         private string _tenant;
         private string _clientId;
         private string _secret;
 
-        private string _contactId;
+        private string _recordId;
 
         /*
          * disable warning CS8618 here as fields are ensured to be initialized by the Initialize-methods
@@ -44,23 +44,23 @@ namespace Xrm.WebApi.Tests
         {
             var testData = configuration.GetSection("TestData");
 
-            _contactId = testData["ContactId"]          ?? throw new ArgumentNullException("ContactId");
+            _recordId = testData["RecordId"] ?? throw new ArgumentNullException("RecordId");
         }
 
         private void InitializeTestConnection(IConfigurationRoot configuration)
         {
             var connection = configuration.GetSection("TestConnection");
 
-            _tenant = connection["Tenant"]              ?? throw new ArgumentNullException("Tenant");
-            _resourceUri = connection["ResourceUri"]    ?? throw new ArgumentNullException("ResourceUri");
+            _tenant = connection["Tenant"] ?? throw new ArgumentNullException("Tenant");
+            _serviceRoot = connection["ServiceRoot"] ?? throw new ArgumentNullException("Resource");
 
             var credential = connection.GetSection("Credentials");
 
-            _clientId = credential["ClientId"]          ?? throw new ArgumentNullException("ClientId");
-            _secret = credential["ClientSecret"]        ?? throw new ArgumentNullException("ClientSecret");
+            _clientId = credential["ClientId"] ?? throw new ArgumentNullException("ClientId");
+            _secret = credential["Secret"] ?? throw new ArgumentNullException("Secret");
 
             _xrmWebApiClient = XrmWebApiClient
-                .ConnectAsync(new Uri(_resourceUri!), new ClientCredentials(_clientId, _secret), _tenant).Result;
+                .ConnectAsync(new Uri(_serviceRoot), new ClientCredentials(_clientId, _secret), _tenant).Result;
         }
     }
 }

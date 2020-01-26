@@ -57,14 +57,14 @@ To run the Unit Tests provide the following organisation-specific connection and
 {
     "TestConnection": {
         "Tenant": "<tenant id>",
-        "ResourceUri": "<service root uri>",
+        "ServiceRoot": "<service root uri>",
         "Credentials": {
             "ClientId": "<client id>",
-            "ClientSecret": "<client secret>"
+            "Secret": "<client secret>"
         }
     },
     "TestData": {
-        "ContactId": "<Id of an existing contact record>"
+        "RecordId": "<Id of an existing contact record>"
     }
 }
 ```

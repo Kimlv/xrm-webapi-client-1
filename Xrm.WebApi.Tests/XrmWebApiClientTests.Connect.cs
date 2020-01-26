@@ -33,7 +33,7 @@ namespace Xrm.WebApi.Tests
             {
                 var clientId = "INVALID_CLIENT_ID";
 
-                await XrmWebApiClient.ConnectAsync(new Uri(_resourceUri), new ClientCredentials(clientId, _secret), _tenant);
+                await XrmWebApiClient.ConnectAsync(new Uri(_serviceRoot), new ClientCredentials(clientId, _secret), _tenant);
             });
         }
 
@@ -46,7 +46,7 @@ namespace Xrm.WebApi.Tests
             {
                 var secret = "INVALID_CLIENT_SECRET";
 
-                await XrmWebApiClient.ConnectAsync(new Uri(_resourceUri), new ClientCredentials(_clientId, secret), _tenant);
+                await XrmWebApiClient.ConnectAsync(new Uri(_serviceRoot), new ClientCredentials(_clientId, secret), _tenant);
             });
         }
 
@@ -72,7 +72,7 @@ namespace Xrm.WebApi.Tests
             {
                 var tenant = "00000000-0000-0000-0000-000000000000";
 
-                await XrmWebApiClient.ConnectAsync(new Uri(_resourceUri), new ClientCredentials(_clientId, _secret), tenant);
+                await XrmWebApiClient.ConnectAsync(new Uri(_serviceRoot), new ClientCredentials(_clientId, _secret), tenant);
             });
         }
     }
