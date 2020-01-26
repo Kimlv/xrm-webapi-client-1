@@ -71,6 +71,6 @@ To run the Unit Tests provide the following organisation-specific connection and
 
 ## ToDo
 
-*  [ ] Create Record
-*  [ ] Update Record
-*  [ ] Delete Record
+* [ ] Create Record
+* [ ] Update Record
+* [ ] Delete Record
