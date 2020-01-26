@@ -6,7 +6,7 @@ A type-safe and generic Dynamics 365 Xrm Web Api Client for .NET Core
 
 ## Example Usage
 
-Define data classes representing the Xrm entity and properties of interest. Implement the `IXrmWebApiQueryable` interface and decorate the properties according to the schema names as returned by the Xrm Web Api if necessary.
+Define data classes representing the Xrm entities and properties of interest. Implement the `IXrmWebApiQueryable` interface and decorate the properties according to the schema names as returned by the Xrm Web Api if necessary.
 
 ```CSharp
 class Account : IXrmWebApiQueryable
