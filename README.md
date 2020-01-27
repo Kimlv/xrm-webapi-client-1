@@ -13,10 +13,10 @@ class Account : IXrmWebApiQueryable
 {
     public string EntityLogicalNamePlural => "accounts";
 
-    [JsonPropertyName("accountid")
+    [JsonPropertyName("accountid")]
     public string? Id { get; set; }
     
-    [JsonPropertyName("statecode")
+    [JsonPropertyName("statecode")]
     public int? StateCode { get; set; }
     
     ...
