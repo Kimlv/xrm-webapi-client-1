@@ -23,7 +23,7 @@ class Account : IXrmWebApiQueryable
 }
 ```
 
-2.  Initialize and connect the `XrmWebApiClient` to your organization's Dynamics 365 Crm instance by providing the required connection and authentication information.
+2.  Initialize and connect the `XrmWebApiClient` to a Dynamics 365 Crm instance by providing the required connection and authentication information.
 
 ```CSharp
 // Azure Tenant id
