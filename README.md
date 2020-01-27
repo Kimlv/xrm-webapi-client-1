@@ -4,9 +4,11 @@
 
 A type-safe and generic Dynamics 365 Xrm Web Api Client for .NET Core
 
-## Example Usage
+## Getting Started
 
-1.  Define data classes representing the Xrm entities and properties of interest. Implement the `IXrmWebApiQueryable` interface and decorate the properties according to the schema names as returned by the Xrm Web Api if necessary.
+### Define your Business Data
+
+Define data classes representing the Xrm entities and properties of interest. Implement the `IXrmWebApiQueryable` interface and decorate the properties according to the schema names as returned by the Xrm Web Api if necessary.
 
 ```CSharp
 class Account : IXrmWebApiQueryable
@@ -23,7 +25,9 @@ class Account : IXrmWebApiQueryable
 }
 ```
 
-2.  Initialize and connect the `XrmWebApiClient` to a Dynamics 365 Crm instance by providing the required connection and authentication information.
+### Connect to your Organization
+
+Initialize and connect the `XrmWebApiClient` to a Dynamics 365 Crm instance by providing the required connection and authentication information.
 
 ```CSharp
 // Azure Tenant id
@@ -41,7 +45,9 @@ XrmWebApiClient client = await XrmWebApiClient
     .ConnectAsync(serviceRootUri, credentials, tenant);
 ```
 
-3.  Use OData system queries to communicate with the Xrm Web Api
+### Communicate with Dynamics
+
+Use OData system queries to communicate with the Xrm Web Api
 
 ```CSharp
 // Get all active accounts
@@ -49,9 +55,11 @@ List<Account> accounts = await client
     .RetrieveMultipleAsync<Account>("?$select=accountid&$filter=statecode eq 0");
 ```
 
-## Tests
+## Build and Test
 
-To run the Unit Tests provide the following organization-specific information and test data in a `secrets.json` file managed by the [Secrets Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows#secret-manager).  
+1. Download or clone the repo and open the `Xrm.WebApi.sln` Solution in Visual Studio.
+2. Build the `Xrm.WebApi.csproj` and `Xrm.Webapi.Tests.csproj` projects
+3. To run the Unit Tests provide the following organization-specific information and test data in a `secrets.json` file managed by the [Secrets Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows#secret-manager).  
 
 ```Json
 {
@@ -71,6 +79,7 @@ To run the Unit Tests provide the following organization-specific information an
 
 ## ToDo
 
-* [ ] Create Record
-* [ ] Update Record
-* [ ] Delete Record
+* [ ] Add method to Create Record
+* [ ] Add method to Update Record
+* [ ] Add method to Delete Record
+* [ ] Publish to NuGet
