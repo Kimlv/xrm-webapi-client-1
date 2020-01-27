@@ -51,7 +51,7 @@ List<Account> accounts = await client
 
 ## Tests
 
-To run the Unit Tests provide the following organisation-specific connection and authentication information and test data in a `secrets.json` managed by the [Secrets Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows#secret-manager).  
+To run the Unit Tests provide the following organization-specific information and test data in a `secrets.json` file managed by the [Secrets Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows#secret-manager).  
 
 ```Json
 {
