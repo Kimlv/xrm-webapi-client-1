@@ -12,10 +12,10 @@ namespace Xrm.WebApi.Tests.Entities
     /// <summary>
     /// Json model for the Dynamics 365 Xrm contact entity.
     /// </summary>
-    internal class Contact : IXrmWebApiQueryable
+    [EntityLogicalName("contact")]
+    [EntityLogicalCollectionName("contacts")]
+    internal class Contact
     {
-        public string EntityLogicalNamePlural => "contacts";
-
         /// <summary>
         /// The guid of the contact.
         /// </summary>
