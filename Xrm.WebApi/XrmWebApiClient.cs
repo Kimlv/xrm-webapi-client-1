@@ -109,7 +109,7 @@ namespace Xrm.WebApi
 
             if (attribute == null)
             {
-                throw new MissingAttributeException(typeof(EntityLogicalCollectionNameAttribute));
+                throw new MissingAttributeException(nameof(T), nameof(EntityLogicalCollectionNameAttribute));
             }
 
             // query the web api
@@ -151,7 +151,7 @@ namespace Xrm.WebApi
 
             if (attribute == null)
             {
-                throw new MissingAttributeException(typeof(EntityLogicalCollectionNameAttribute));
+                throw new MissingAttributeException(nameof(T), nameof(EntityLogicalCollectionNameAttribute));
             }
 
             // query the web api
