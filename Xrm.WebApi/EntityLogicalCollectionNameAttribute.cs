@@ -9,7 +9,7 @@ using System;
 
 namespace Xrm.WebApi
 {
-    class EntityLogicalCollectionNameAttribute : Attribute
+    public class EntityLogicalCollectionNameAttribute : Attribute
     {
     }
 }
