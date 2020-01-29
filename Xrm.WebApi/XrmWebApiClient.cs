@@ -103,13 +103,18 @@ namespace Xrm.WebApi
         /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord"/>
         /// </remarks>
         public async Task<T> RetrieveAsync<T>(string id, string options = "")
-            where T : class, IXrmWebApiQueryable, new()
         {
-            var entity = new T();
+            EntityLogicalCollectionNameAttribute? attribute =
+                (EntityLogicalCollectionNameAttribute?)Attribute.GetCustomAttribute(typeof(T), typeof(EntityLogicalCollectionNameAttribute));
+
+            if (attribute == null)
+            {
+                throw new MissingAttributeException(typeof(EntityLogicalCollectionNameAttribute));
+            }
 
             // query the web api
             HttpResponseMessage response =
-                await _httpClient.GetAsync($"{entity.EntityLogicalNamePlural}({id}){options}");
+                await _httpClient.GetAsync($"{attribute.EntityLogicalCollectionName}({id}){options}");
 
             // parse web api response as stream
             var content = await response.Content.ReadAsStreamAsync();
@@ -140,13 +145,18 @@ namespace Xrm.WebApi
         /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords"/>
         /// </remarks>
         public async Task<List<T>> RetrieveMultipleAsync<T>(string options)
-            where T : class, IXrmWebApiQueryable, new()
         {
-            var entity = new T();
+            EntityLogicalCollectionNameAttribute? attribute =
+                (EntityLogicalCollectionNameAttribute?)Attribute.GetCustomAttribute(typeof(T), typeof(EntityLogicalCollectionNameAttribute));
+
+            if (attribute == null)
+            {
+                throw new MissingAttributeException(typeof(EntityLogicalCollectionNameAttribute));
+            }
 
             // query the web api
             HttpResponseMessage response =
-                await _httpClient.GetAsync($"{entity.EntityLogicalNamePlural}{options}");
+                await _httpClient.GetAsync($"{attribute.EntityLogicalCollectionName}{options}");
 
             // parse web api response as stream
             var content = await response.Content.ReadAsStreamAsync();
