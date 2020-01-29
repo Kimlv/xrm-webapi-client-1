@@ -11,5 +11,11 @@ namespace Xrm.WebApi
 {
     public class EntityLogicalCollectionNameAttribute : Attribute
     {
+        public string EntityLogicalCollectionName { get; }
+
+        public EntityLogicalCollectionNameAttribute(string entityLogicalCollectionName)
+        {
+            EntityLogicalCollectionName = entityLogicalCollectionName;
+        }
     }
 }
