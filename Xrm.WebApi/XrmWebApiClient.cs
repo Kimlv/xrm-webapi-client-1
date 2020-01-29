@@ -104,13 +104,7 @@ namespace Xrm.WebApi
         /// </remarks>
         public async Task<T> RetrieveAsync<T>(string id, string options = "")
         {
-            EntityLogicalCollectionNameAttribute? attribute =
-                (EntityLogicalCollectionNameAttribute?)Attribute.GetCustomAttribute(typeof(T), typeof(EntityLogicalCollectionNameAttribute));
-
-            if (attribute == null)
-            {
-                throw new MissingAttributeException(nameof(T), nameof(EntityLogicalCollectionNameAttribute));
-            }
+            var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // query the web api
             HttpResponseMessage response =
@@ -146,13 +140,7 @@ namespace Xrm.WebApi
         /// </remarks>
         public async Task<List<T>> RetrieveMultipleAsync<T>(string options)
         {
-            EntityLogicalCollectionNameAttribute? attribute =
-                (EntityLogicalCollectionNameAttribute?)Attribute.GetCustomAttribute(typeof(T), typeof(EntityLogicalCollectionNameAttribute));
-
-            if (attribute == null)
-            {
-                throw new MissingAttributeException(nameof(T), nameof(EntityLogicalCollectionNameAttribute));
-            }
+            var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // query the web api
             HttpResponseMessage response =
@@ -179,6 +167,19 @@ namespace Xrm.WebApi
             {
                 throw new XrmWebApiException(response);
             }
+        }
+
+        private static A TryResolveAttribute<A>(Type type)
+            where A : Attribute
+        {
+            A? attribute = (A?)Attribute.GetCustomAttribute(type, typeof(A));
+
+            if (attribute == null)
+            {
+                throw new MissingAttributeException(nameof(type), nameof(A));
+            }
+
+            return attribute;
         }
     }
 }
