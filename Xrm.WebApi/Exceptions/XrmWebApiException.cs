@@ -11,7 +11,7 @@ using System.Text.Json;
 
 using Xrm.WebApi.Responses;
 
-namespace Xrm.WebApi
+namespace Xrm.WebApi.Exceptions
 {
     /// <summary>
     /// Exception thrown on Dynamics 365 Xrm Web Api request failure.

@@ -7,7 +7,7 @@
 
 using System;
 
-namespace Xrm.WebApi
+namespace Xrm.WebApi.Exceptions
 {
     internal class MissingAttributeException : Exception
     {

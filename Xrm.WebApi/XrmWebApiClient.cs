@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Xrm.WebApi.Responses;
+using Xrm.WebApi.Exceptions;
 
 namespace Xrm.WebApi
 {
