@@ -13,6 +13,7 @@ namespace Xrm.WebApi
     /// Attribute making an entity class create-/update-/deletable
     /// by the <see cref="XrmWebApiClient"/>.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
     public class EntityLogicalNameAttribute : Attribute
     {
         /// <summary>

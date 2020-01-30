@@ -12,6 +12,7 @@ namespace Xrm.WebApi
     /// <summary>
     /// Attribute making an entity class retrievable by the <see cref="XrmWebApiClient"/>.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
     public class EntityLogicalCollectionNameAttribute : Attribute
     {
         /// <summary>
