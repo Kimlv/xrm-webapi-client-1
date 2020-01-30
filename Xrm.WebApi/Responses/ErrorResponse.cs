@@ -7,7 +7,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace Xrm.WebApi.Response
+namespace Xrm.WebApi.Responses
 {
     /// <summary>
     /// Json model for a Dynamics 365 Xrm Web Api response containing an error.

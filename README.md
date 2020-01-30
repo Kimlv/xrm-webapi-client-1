@@ -8,13 +8,13 @@ A type-safe and generic Dynamics 365 Xrm Web Api Client for .NET Core
 
 ### Define your Business Data
 
-Define data classes representing the Xrm entities and properties of interest. Implement the `IXrmWebApiQueryable` interface and decorate the properties according to the schema names as returned by the Xrm Web Api if necessary.
+Define data classes representing the Xrm entities and properties of interest. Decorate the entity classes and properties according to your schema.
 
 ```CSharp
-class Account : IXrmWebApiQueryable
+[EntityLogicalName("account")]
+[EntityLogicalCollectionName("accounts")]
+class Account
 {
-    public string EntityLogicalNamePlural => "accounts";
-
     [JsonPropertyName("accountid")]
     public string? Id { get; set; }
     
@@ -27,7 +27,7 @@ class Account : IXrmWebApiQueryable
 
 ### Connect to your Organization
 
-Initialize and connect the `XrmWebApiClient` to a Dynamics 365 Crm instance by providing the required connection and authentication information.
+Initialize and connect the `XrmWebApiClient` to your Dynamics 365 Crm instance by providing the required connection and authentication information.
 
 ```CSharp
 // Azure Tenant id
@@ -79,7 +79,8 @@ List<Account> accounts = await client
 
 ## ToDo
 
-* [ ] Add method to Create Record
-* [ ] Add method to Update Record
-* [ ] Add method to Delete Record
+* [x] Add custom attributes for entity classes
+* [ ] Add method to create record
+* [ ] Add method to update record
+* [ ] Add method to delete record
 * [ ] Publish to NuGet
