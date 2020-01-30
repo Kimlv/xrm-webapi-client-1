@@ -9,7 +9,7 @@ using System;
 using System.Net.Http;
 using System.Text.Json;
 
-using Xrm.WebApi.Response;
+using Xrm.WebApi.Responses;
 
 namespace Xrm.WebApi
 {

@@ -12,7 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using Xrm.WebApi.Response;
+using Xrm.WebApi.Responses;
 
 namespace Xrm.WebApi
 {
