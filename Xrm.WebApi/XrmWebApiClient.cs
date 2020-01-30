@@ -105,6 +105,7 @@ namespace Xrm.WebApi
         /// </remarks>
         public async Task<T> RetrieveAsync<T>(string id, string options = "")
         {
+            // ensure T is decorated with the required attribute in order to retrieve records
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // query the web api
@@ -141,6 +142,7 @@ namespace Xrm.WebApi
         /// </remarks>
         public async Task<List<T>> RetrieveMultipleAsync<T>(string options)
         {
+            // ensure T is decorated with the required attribute in order to retrieve records
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // query the web api

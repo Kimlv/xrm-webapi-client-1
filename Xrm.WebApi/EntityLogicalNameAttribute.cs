@@ -9,10 +9,23 @@ using System;
 
 namespace Xrm.WebApi
 {
+    /// <summary>
+    /// Attribute making an entity class create-/update-/deletable
+    /// by the <see cref="XrmWebApiClient"/>.
+    /// </summary>
     public class EntityLogicalNameAttribute : Attribute
     {
+        /// <summary>
+        /// The logical name of the entity represented by the class.
+        /// </summary>
         public string EntityLogicalName { get; }
 
+        /// <summary>
+        /// Initializes an <see cref="EntityLogicalNameAttribute"/>.
+        /// </summary>
+        /// <param name="entityLogicalName">
+        /// The logical name of the entity represented by the class
+        /// </param>
         public EntityLogicalNameAttribute(string entityLogicalName)
         {
             EntityLogicalName = entityLogicalName;
