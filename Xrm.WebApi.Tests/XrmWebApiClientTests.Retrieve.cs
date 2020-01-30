@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using System.Threading.Tasks;
 
+using Xrm.WebApi.Exceptions;
 using Xrm.WebApi.Tests.Entities;
 
 namespace Xrm.WebApi.Tests
