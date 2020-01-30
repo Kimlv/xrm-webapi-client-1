@@ -7,7 +7,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace Xrm.WebApi.Response
+namespace Xrm.WebApi.Responses
 {
     /// <summary>
     /// Json model for an OAuth2 access token response.

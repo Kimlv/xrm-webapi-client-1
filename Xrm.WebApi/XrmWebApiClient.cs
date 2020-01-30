@@ -12,7 +12,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using Xrm.WebApi.Response;
+using Xrm.WebApi.Responses;
+using Xrm.WebApi.Exceptions;
 
 namespace Xrm.WebApi
 {
@@ -103,13 +104,13 @@ namespace Xrm.WebApi
         /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord"/>
         /// </remarks>
         public async Task<T> RetrieveAsync<T>(string id, string options = "")
-            where T : class, IXrmWebApiQueryable, new()
         {
-            var entity = new T();
+            // ensure T is decorated with the required attribute in order to retrieve records
+            var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // query the web api
             HttpResponseMessage response =
-                await _httpClient.GetAsync($"{entity.EntityLogicalNamePlural}({id}){options}");
+                await _httpClient.GetAsync($"{attribute.EntityLogicalCollectionName}({id}){options}");
 
             // parse web api response as stream
             var content = await response.Content.ReadAsStreamAsync();
@@ -140,13 +141,13 @@ namespace Xrm.WebApi
         /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords"/>
         /// </remarks>
         public async Task<List<T>> RetrieveMultipleAsync<T>(string options)
-            where T : class, IXrmWebApiQueryable, new()
         {
-            var entity = new T();
+            // ensure T is decorated with the required attribute in order to retrieve records
+            var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // query the web api
             HttpResponseMessage response =
-                await _httpClient.GetAsync($"{entity.EntityLogicalNamePlural}{options}");
+                await _httpClient.GetAsync($"{attribute.EntityLogicalCollectionName}{options}");
 
             // parse web api response as stream
             var content = await response.Content.ReadAsStreamAsync();
@@ -169,6 +170,19 @@ namespace Xrm.WebApi
             {
                 throw new XrmWebApiException(response);
             }
+        }
+
+        private static A TryResolveAttribute<A>(Type type)
+            where A : Attribute
+        {
+            A? attribute = (A?)Attribute.GetCustomAttribute(type, typeof(A));
+
+            if (attribute == null)
+            {
+                throw new MissingAttributeException(nameof(type), nameof(A));
+            }
+
+            return attribute;
         }
     }
 }
