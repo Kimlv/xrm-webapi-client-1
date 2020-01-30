@@ -66,6 +66,18 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
+        [TestCategory("Negative")]
+        public async Task RetrieveMultipleAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
+        {
+            await Assert.ThrowsExceptionAsync<MissingAttributeException>(async () =>
+            {
+                var options = "";
+                await _xrmWebApiClient.RetrieveMultipleAsync<Account>(options);
+            });
+        }
+
+        [TestMethod]
+        [TestCategory("Retrieve")]
         [TestCategory("Positive")]
         public async Task RetrieveAsync_Record_ShouldReturnResult()
         {
@@ -107,6 +119,18 @@ namespace Xrm.WebApi.Tests
             {
                 var options = "?$invalid_option";
                 await _xrmWebApiClient.RetrieveAsync<Contact>(_recordId, options);
+            });
+        }
+
+        [TestMethod]
+        [TestCategory("Retrieve")]
+        [TestCategory("Negative")]
+        public async Task RetrieveAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
+        {
+            await Assert.ThrowsExceptionAsync<MissingAttributeException>(async () =>
+            {
+                var options = "";
+                await _xrmWebApiClient.RetrieveAsync<Account>(_recordId, options);
             });
         }
     }
