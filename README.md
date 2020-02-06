@@ -6,12 +6,11 @@ A type-safe and generic Dynamics 365 Xrm Web Api Client for .NET Core
 
 ## Getting Started
 
-### Define your Business Data
+### Describe your Business Data
 
 Define data classes representing the Xrm entities and properties of interest. Decorate the entity classes and properties according to your schema.
 
 ```CSharp
-[EntityLogicalName("account")]
 [EntityLogicalCollectionName("accounts")]
 class Account
 {
@@ -45,7 +44,7 @@ XrmWebApiClient client = await XrmWebApiClient
     .ConnectAsync(serviceRootUri, credentials, tenant);
 ```
 
-### Communicate with Dynamics
+### Communicate with Dynamics 365
 
 Use OData system queries to communicate with the Xrm Web Api
 

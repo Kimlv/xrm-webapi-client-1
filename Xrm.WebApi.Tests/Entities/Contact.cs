@@ -12,7 +12,6 @@ namespace Xrm.WebApi.Tests.Entities
     /// <summary>
     /// Json model for the Dynamics 365 Xrm contact entity.
     /// </summary>
-    [EntityLogicalName("contact")]
     [EntityLogicalCollectionName("contacts")]
     internal class Contact
     {
