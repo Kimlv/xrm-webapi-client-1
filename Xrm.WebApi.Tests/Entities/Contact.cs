@@ -20,5 +20,17 @@ namespace Xrm.WebApi.Tests.Entities
         /// </summary>
         [JsonPropertyName("contactid")]
         public string? ContactId { get; set; }
+
+        /// <summary>
+        /// The first name of the contact.
+        /// </summary>
+        [JsonPropertyName("firstname")]
+        public string? FirstName { get; set; }
+
+        /// <summary>
+        /// The last name of the contact.
+        /// </summary>
+        [JsonPropertyName("lastname")]
+        public string? LastName { get; set; }
     }
 }
