@@ -14,6 +14,8 @@ using System.Collections.Generic;
 
 using Xrm.WebApi.Responses;
 using Xrm.WebApi.Exceptions;
+using System.Text;
+using System.IO;
 
 namespace Xrm.WebApi
 {
@@ -91,6 +93,38 @@ namespace Xrm.WebApi
                 new AuthenticationHeaderValue("Bearer", accessTokenResponse.AccessToken);
 
             return new XrmWebApiClient(httpClient);
+        }
+
+        public async Task<Guid> CreateAsync<T>(T record)
+        {
+            // ensure T is decorated with the required attribute in order to create records
+            var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
+
+            // serialize the record into json
+            using var json = new MemoryStream();
+            await JsonSerializer.SerializeAsync<T>(json, record);
+
+            // create json content for http request
+            var recordData = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+
+            // query the web api
+            HttpResponseMessage response =
+                await _httpClient.PostAsync($"{attribute.EntityLogicalCollectionName}", recordData);
+
+            try
+            {
+                // throw if the http request failed or the web api returned an error
+                response.EnsureSuccessStatusCode();
+            }
+            catch
+            {
+                throw new XrmWebApiException(response);
+            }
+
+            // parse web api response as string
+            var content = await response.Content.ReadAsStringAsync();
+
+            return new Guid(content);
         }
 
         /// <summary>
