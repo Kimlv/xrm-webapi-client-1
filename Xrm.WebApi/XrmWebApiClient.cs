@@ -100,31 +100,38 @@ namespace Xrm.WebApi
             // ensure T is decorated with the required attribute in order to create records
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
-            // serialize the record into json
             using var json = new MemoryStream();
-            await JsonSerializer.SerializeAsync<T>(json, record);
 
-            // create json content for http request
-            var recordData = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
+            // serialize record into json
+            await JsonSerializer.SerializeAsync<T>(json, record, new JsonSerializerOptions()
+            {
+                IgnoreNullValues = true
+            });
+
+            json.Position = 0;
+
+            // create http request content from json
+            var content = new StreamContent(json);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             // query the web api
             HttpResponseMessage response =
-                await _httpClient.PostAsync($"{attribute.EntityLogicalCollectionName}", recordData);
+                await _httpClient.PostAsync($"{attribute.EntityLogicalCollectionName}", content);
 
             try
             {
                 // throw if the http request failed or the web api returned an error
                 response.EnsureSuccessStatusCode();
+
+                // extract id of created record from response
+                var id = response.Headers.Location.AbsoluteUri.Split('(', ')')[1];
+
+                return new Guid(id);
             }
             catch
             {
                 throw new XrmWebApiException(response);
             }
-
-            // parse web api response as string
-            var content = await response.Content.ReadAsStringAsync();
-
-            return new Guid(content);
         }
 
         /// <summary>
