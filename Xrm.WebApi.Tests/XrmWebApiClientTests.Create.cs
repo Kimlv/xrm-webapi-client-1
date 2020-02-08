@@ -58,5 +58,21 @@ namespace Xrm.WebApi.Tests
                 var id = await _xrmWebApiClient.CreateAsync<Account>(record);
             });
         }
+
+        [TestMethod]
+        [TestCategory("Create")]
+        [TestCategory("Negative")]
+        public async Task CreateAsync_WithInvalidData_ShouldThrowXrmWebApiException()
+        {
+            await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
+            {
+                var record = new Contact()
+                { 
+                    PropertyShouldNotExist = "invalid_property"
+                };
+
+                var id = await _xrmWebApiClient.CreateAsync<Contact>(record);
+            });
+        }
     }
 }
