@@ -100,18 +100,18 @@ namespace Xrm.WebApi
             // ensure T is decorated with the required attribute in order to create records
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
-            using var json = new MemoryStream();
+            using var jsonStream = new MemoryStream();
 
             // serialize record into json
-            await JsonSerializer.SerializeAsync<T>(json, record, new JsonSerializerOptions()
+            await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions()
             {
                 IgnoreNullValues = true
             });
 
-            json.Position = 0;
+            jsonStream.Position = 0;
 
             // create http request content from json
-            var content = new StreamContent(json);
+            var content = new StreamContent(jsonStream);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             // query the web api
