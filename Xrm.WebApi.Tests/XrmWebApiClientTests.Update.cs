@@ -7,7 +7,6 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using System;
 using System.Threading.Tasks;
 
 using Xrm.WebApi.Exceptions;
@@ -18,25 +17,22 @@ namespace Xrm.WebApi.Tests
     public partial class XrmWebApiClientTests
     {
         [TestMethod]
-        [TestCategory("Create")]
+        [TestCategory("Update")]
         [TestCategory("Positive")]
-        public async Task CreateAsync_WithData_ShouldReturnResult()
+        public async Task UpdateAsync_WithData_ShouldReturnWithSuccess()
         {
             var record = new Contact
             {
-                LastName = "XrmWebApiClientTestUser"
+                FirstName = "XrmWebApiClient_Update"
             };
 
-            var id = await _xrmWebApiClient.CreateAsync<Contact>(record);
-
-            Assert.IsNotNull(id);
-            Assert.IsInstanceOfType(id, typeof(Guid));
+            await _xrmWebApiClient.UpdateAsync<Contact>(_recordId, record);
         }
 
         [TestMethod]
-        [TestCategory("Create")]
+        [TestCategory("Update")]
         [TestCategory("Negative")]
-        public async Task CreateAsync_WithInvalidData_ShouldThrowXrmWebApiException()
+        public async Task UpdateAsync_WithInvalidData_ShouldThrowXrmWebApiException()
         {
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
             {
@@ -45,20 +41,20 @@ namespace Xrm.WebApi.Tests
                     PropertyShouldNotExist = "invalid_property"
                 };
 
-                await _xrmWebApiClient.CreateAsync<Contact>(record);
+                await _xrmWebApiClient.UpdateAsync<Contact>(_recordId, record);
             });
         }
 
         [TestMethod]
-        [TestCategory("Create")]
+        [TestCategory("Update")]
         [TestCategory("Negative")]
-        public async Task CreateAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
+        public async Task UpdateAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
         {
             await Assert.ThrowsExceptionAsync<MissingAttributeException>(async () =>
             {
                 var record = new Account();
 
-                await _xrmWebApiClient.CreateAsync<Account>(record);
+                await _xrmWebApiClient.UpdateAsync<Account>(_recordId, record);
             });
         }
     }

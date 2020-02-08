@@ -111,19 +111,8 @@ namespace Xrm.WebApi
             // ensure T is decorated with the required attribute in order to create records
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
-            using var jsonStream = new MemoryStream();
-
-            // serialize record into json
-            await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions
-            {
-                IgnoreNullValues = true
-            });
-
-            jsonStream.Position = 0;
-
-            // create http request content from json
-            var content = new StreamContent(jsonStream);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            // create http content containing the json representation of the record
+            using var content = await GetJsonContent<T>(record);
 
             // query the web api
             HttpResponseMessage response =
@@ -146,10 +135,45 @@ namespace Xrm.WebApi
         }
 
         /// <summary>
+        /// Updates an entity record.
+        /// </summary>
+        /// <typeparam name="T">The entity to update</typeparam>
+        /// <param name="id">The id of the record to update</param>
+        /// <param name="record">
+        /// An instance of the record to update where all
+        /// non-null properties will be updated
+        /// </param>
+        /// <remarks>
+        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/update-delete-entities-using-web-api"/>
+        /// </remarks>
+        public async Task UpdateAsync<T>(string id, T record)
+        {
+            // ensure T is decorated with the required attribute in order to update records
+            var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
+
+            // create http content containing the json representation of the record
+            using var content = await GetJsonContent<T>(record);
+
+            // query the web api
+            HttpResponseMessage response =
+                await _httpClient.PatchAsync($"{attribute.EntityLogicalCollectionName}({id})", content);
+
+            try
+            {
+                // throw if the http request failed or the web api returned an error
+                response.EnsureSuccessStatusCode();
+            }
+            catch
+            {
+                throw new XrmWebApiException(response);
+            }
+        }
+
+        /// <summary>
         /// Retrieves a single entity record.
         /// </summary>
         /// <typeparam name="T">The entity to query</typeparam>
-        /// <param name="id">Guid of the record to retrieve</param>
+        /// <param name="id">The id of the record to retrieve</param>
         /// <param name="options">OData system query options as supported by the Xrm Web Api</param>
         /// <returns>A record of <typeparamref name="T"/>.</returns>
         /// <remarks>
@@ -235,6 +259,23 @@ namespace Xrm.WebApi
             }
 
             return attribute;
+        }
+
+        private static async Task<HttpContent> GetJsonContent<T>(T record)
+        {
+            var jsonStream = new MemoryStream();
+
+            await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions
+            {
+                IgnoreNullValues = true
+            });
+
+            jsonStream.Position = 0;
+
+            var content = new StreamContent(jsonStream);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return content;
         }
     }
 }
