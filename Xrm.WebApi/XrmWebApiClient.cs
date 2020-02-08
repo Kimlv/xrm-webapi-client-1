@@ -112,7 +112,7 @@ namespace Xrm.WebApi
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // create http content containing the json representation of the record
-            var content = await GetJsonContent<T>(record);
+            using var content = await GetJsonContent<T>(record);
 
             // query the web api
             HttpResponseMessage response =
@@ -140,7 +140,7 @@ namespace Xrm.WebApi
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // create http content containing the json representation of the record
-            var content = await GetJsonContent<T>(record);
+            using var content = await GetJsonContent<T>(record);
 
             // query the web api
             HttpResponseMessage response =
@@ -251,7 +251,7 @@ namespace Xrm.WebApi
 
         private static async Task<HttpContent> GetJsonContent<T>(T record)
         {
-            using var jsonStream = new MemoryStream();
+            var jsonStream = new MemoryStream();
 
             await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions
             {
