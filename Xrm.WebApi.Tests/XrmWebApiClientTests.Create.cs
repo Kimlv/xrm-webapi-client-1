@@ -19,13 +19,26 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Create")]
         [TestCategory("Positive")]
-        public async Task CreateAsync_WithData_ShouldReturnResultGuid()
+        public async Task CreateAsync_WithData_ShouldReturnResult()
         {
             var record = new Contact()
             {
                 FirstName = "Alfred",
                 LastName = "Quack"
             };
+
+            var id = await _xrmWebApiClient.CreateAsync<Contact>(record);
+
+            Assert.IsNotNull(id);
+            Assert.IsInstanceOfType(id, typeof(Guid));
+        }
+
+        [TestMethod]
+        [TestCategory("Create")]
+        [TestCategory("Positive")]
+        public async Task CreateAsync_WithNoData_ShouldReturnResult()
+        {
+            var record = new Contact();
 
             var id = await _xrmWebApiClient.CreateAsync<Contact>(record);
 
