@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using System;
 using System.Threading.Tasks;
-
+using Xrm.WebApi.Exceptions;
 using Xrm.WebApi.Tests.Entities;
 
 namespace Xrm.WebApi.Tests
@@ -44,6 +44,19 @@ namespace Xrm.WebApi.Tests
 
             Assert.IsNotNull(id);
             Assert.IsInstanceOfType(id, typeof(Guid));
+        }
+
+        [TestMethod]
+        [TestCategory("Create")]
+        [TestCategory("Negative")]
+        public async Task CreateAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
+        {
+            await Assert.ThrowsExceptionAsync<MissingAttributeException>(async () =>
+            {
+                var record = new Account();
+
+                var id = await _xrmWebApiClient.CreateAsync<Account>(record);
+            });
         }
     }
 }
