@@ -6,16 +6,15 @@
  */
 
 using System;
+using System.IO;
+using System.Text.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Xrm.WebApi.Responses;
 using Xrm.WebApi.Exceptions;
-using System.Text;
-using System.IO;
 
 namespace Xrm.WebApi
 {
@@ -95,6 +94,18 @@ namespace Xrm.WebApi
             return new XrmWebApiClient(httpClient);
         }
 
+        /// <summary>
+        /// Creates an entity record.
+        /// </summary>
+        /// <typeparam name="T">The entity to create</typeparam>
+        /// <param name="record">
+        /// An instance of the record to create where all
+        /// non-null properties will be initialized
+        /// </param>
+        /// <returns> The <see cref="Guid"/> of the record created</returns>
+        /// <remarks>
+        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/create-entity-web-api"/>
+        /// </remarks>
         public async Task<Guid> CreateAsync<T>(T record)
         {
             // ensure T is decorated with the required attribute in order to create records
@@ -142,7 +153,7 @@ namespace Xrm.WebApi
         /// <param name="options">OData system query options as supported by the Xrm Web Api</param>
         /// <returns>A record of <typeparamref name="T"/>.</returns>
         /// <remarks>
-        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord"/>
+        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/retrieve-entity-using-web-api"/>
         /// </remarks>
         public async Task<T> RetrieveAsync<T>(string id, string options = "")
         {
@@ -179,7 +190,7 @@ namespace Xrm.WebApi
         /// <param name="options">OData system query options as supported by the Xrm Web Api</param>
         /// <returns>A list of records of <typeparamref name="T"/>.</returns>
         /// <remarks>
-        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords"/>
+        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/retrieve-entity-using-web-api"/>
         /// </remarks>
         public async Task<List<T>> RetrieveMultipleAsync<T>(string options)
         {
