@@ -111,19 +111,8 @@ namespace Xrm.WebApi
             // ensure T is decorated with the required attribute in order to create records
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
-            using var jsonStream = new MemoryStream();
-
-            // serialize record into json
-            await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions
-            {
-                IgnoreNullValues = true
-            });
-
-            jsonStream.Position = 0;
-
-            // create http request content from json
-            var content = new StreamContent(jsonStream);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            // create http content containing the json representation of the record
+            var content = await GetJsonContent<T>(record);
 
             // query the web api
             HttpResponseMessage response =
@@ -145,29 +134,13 @@ namespace Xrm.WebApi
             }
         }
 
-        public async Task UpdateAsync<T>(Guid id, T record)
-        {
-            await UpdateAsync<T>(id.ToString(), record);
-        }
-
         public async Task UpdateAsync<T>(string id, T record)
         {
             // ensure T is decorated with the required attribute in order to update records
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
-            using var jsonStream = new MemoryStream();
-
-            // serialize record into json
-            await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions
-            {
-                IgnoreNullValues = true
-            });
-
-            jsonStream.Position = 0;
-
-            // create http request content from json
-            var content = new StreamContent(jsonStream);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            // create http content containing the json representation of the record
+            var content = await GetJsonContent<T>(record);
 
             // query the web api
             HttpResponseMessage response =
@@ -274,6 +247,23 @@ namespace Xrm.WebApi
             }
 
             return attribute;
+        }
+
+        private static async Task<HttpContent> GetJsonContent<T>(T record)
+        {
+            using var jsonStream = new MemoryStream();
+
+            await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions
+            {
+                IgnoreNullValues = true
+            });
+
+            jsonStream.Position = 0;
+
+            var content = new StreamContent(jsonStream);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return content;
         }
     }
 }
