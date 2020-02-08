@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using System;
 using System.Threading.Tasks;
+
 using Xrm.WebApi.Exceptions;
 using Xrm.WebApi.Tests.Entities;
 
@@ -35,6 +36,22 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Create")]
         [TestCategory("Negative")]
+        public async Task CreateAsync_WithInvalidData_ShouldThrowXrmWebApiException()
+        {
+            await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
+            {
+                var record = new Contact
+                {
+                    PropertyShouldNotExist = "invalid_property"
+                };
+
+                await _xrmWebApiClient.CreateAsync<Contact>(record);
+            });
+        }
+
+        [TestMethod]
+        [TestCategory("Create")]
+        [TestCategory("Negative")]
         public async Task CreateAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
         {
             await Assert.ThrowsExceptionAsync<MissingAttributeException>(async () =>
@@ -42,22 +59,6 @@ namespace Xrm.WebApi.Tests
                 var record = new Account();
 
                 await _xrmWebApiClient.CreateAsync<Account>(record);
-            });
-        }
-
-        [TestMethod]
-        [TestCategory("Create")]
-        [TestCategory("Negative")]
-        public async Task CreateAsync_WithInvalidData_ShouldThrowXrmWebApiException()
-        {
-            await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
-            {
-                var record = new Contact
-                { 
-                    PropertyShouldNotExist = "invalid_property"
-                };
-
-                await _xrmWebApiClient.CreateAsync<Contact>(record);
             });
         }
     }
