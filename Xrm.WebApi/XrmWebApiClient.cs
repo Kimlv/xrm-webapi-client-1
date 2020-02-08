@@ -6,9 +6,10 @@
  */
 
 using System;
+using System.IO;
+using System.Text.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -94,6 +95,57 @@ namespace Xrm.WebApi
         }
 
         /// <summary>
+        /// Creates an entity record.
+        /// </summary>
+        /// <typeparam name="T">The entity to create</typeparam>
+        /// <param name="record">
+        /// An instance of the record to create where all
+        /// non-null properties will be initialized
+        /// </param>
+        /// <returns> The <see cref="Guid"/> of the record created</returns>
+        /// <remarks>
+        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/create-entity-web-api"/>
+        /// </remarks>
+        public async Task<Guid> CreateAsync<T>(T record)
+        {
+            // ensure T is decorated with the required attribute in order to create records
+            var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
+
+            using var jsonStream = new MemoryStream();
+
+            // serialize record into json
+            await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions
+            {
+                IgnoreNullValues = true
+            });
+
+            jsonStream.Position = 0;
+
+            // create http request content from json
+            var content = new StreamContent(jsonStream);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            // query the web api
+            HttpResponseMessage response =
+                await _httpClient.PostAsync($"{attribute.EntityLogicalCollectionName}", content);
+
+            try
+            {
+                // throw if the http request failed or the web api returned an error
+                response.EnsureSuccessStatusCode();
+
+                // extract id of created record from response
+                var id = response.Headers.Location.AbsoluteUri.Split('(', ')')[1];
+
+                return new Guid(id);
+            }
+            catch
+            {
+                throw new XrmWebApiException(response);
+            }
+        }
+
+        /// <summary>
         /// Retrieves a single entity record.
         /// </summary>
         /// <typeparam name="T">The entity to query</typeparam>
@@ -101,7 +153,7 @@ namespace Xrm.WebApi
         /// <param name="options">OData system query options as supported by the Xrm Web Api</param>
         /// <returns>A record of <typeparamref name="T"/>.</returns>
         /// <remarks>
-        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrieverecord"/>
+        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/retrieve-entity-using-web-api"/>
         /// </remarks>
         public async Task<T> RetrieveAsync<T>(string id, string options = "")
         {
@@ -138,7 +190,7 @@ namespace Xrm.WebApi
         /// <param name="options">OData system query options as supported by the Xrm Web Api</param>
         /// <returns>A list of records of <typeparamref name="T"/>.</returns>
         /// <remarks>
-        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/retrievemultiplerecords"/>
+        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/retrieve-entity-using-web-api"/>
         /// </remarks>
         public async Task<List<T>> RetrieveMultipleAsync<T>(string options)
         {
