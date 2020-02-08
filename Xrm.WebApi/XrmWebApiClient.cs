@@ -66,16 +66,21 @@ namespace Xrm.WebApi
             });
 
             // request an access token
-            HttpResponseMessage response =
-                await client.PostAsync($"https://login.microsoftonline.com/{tenant}/oauth2/token", formContent);
+            HttpResponseMessage response = await client
+                .PostAsync($"https://login.microsoftonline.com/{tenant}/oauth2/token", formContent)
+                .ConfigureAwait(false);
 
             // throw error if access token http request failed
             response.EnsureSuccessStatusCode();
 
-            // parse access token response as json
-            var content = await response.Content.ReadAsStringAsync();
-            // parse access token response from json
-            var accessTokenResponse = JsonSerializer.Deserialize<AccessTokenResponse>(content);
+            // parse access token response
+            var content = await response.Content.ReadAsStreamAsync()
+                .ConfigureAwait(false);
+
+            // deserialize access token from json
+            var accessTokenResponse = await JsonSerializer
+                .DeserializeAsync<AccessTokenResponse>(content)
+                .ConfigureAwait(false);
 
             // create wep api http client
             var httpClient = new HttpClient
@@ -112,11 +117,12 @@ namespace Xrm.WebApi
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // create http content containing the json representation of the record
-            using var content = await GetJsonContent<T>(record);
+            using var content = await GetJsonContent<T>(record).ConfigureAwait(false);
 
             // query the web api
-            HttpResponseMessage response =
-                await _httpClient.PostAsync($"{attribute.EntityLogicalCollectionName}", content);
+            HttpResponseMessage response = await _httpClient
+                .PostAsync($"{attribute.EntityLogicalCollectionName}", content)
+                .ConfigureAwait(false);
 
             try
             {
@@ -152,11 +158,12 @@ namespace Xrm.WebApi
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // create http content containing the json representation of the record
-            using var content = await GetJsonContent<T>(record);
+            using var content = await GetJsonContent<T>(record).ConfigureAwait(false);
 
             // query the web api
-            HttpResponseMessage response =
-                await _httpClient.PatchAsync($"{attribute.EntityLogicalCollectionName}({id})", content);
+            HttpResponseMessage response = await _httpClient
+                .PatchAsync($"{attribute.EntityLogicalCollectionName}({id})", content)
+                .ConfigureAwait(false);
 
             try
             {
@@ -185,16 +192,20 @@ namespace Xrm.WebApi
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // query the web api
-            HttpResponseMessage response =
-                await _httpClient.GetAsync($"{attribute.EntityLogicalCollectionName}({id}){options}");
+            HttpResponseMessage response = await _httpClient
+                .GetAsync($"{attribute.EntityLogicalCollectionName}({id}){options}")
+                .ConfigureAwait(false);
 
             // parse web api response as stream
-            var content = await response.Content.ReadAsStreamAsync();
+            var content = await response.Content.ReadAsStreamAsync()
+                .ConfigureAwait(false);
 
             try
             {
                 // try parsing a record from json
-                var record = await JsonSerializer.DeserializeAsync<T>(content);
+                var record = await JsonSerializer
+                    .DeserializeAsync<T>(content)
+                    .ConfigureAwait(false);
 
                 // throw if the http request failed or the web api returned an error
                 response.EnsureSuccessStatusCode();
@@ -222,17 +233,20 @@ namespace Xrm.WebApi
             var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
 
             // query the web api
-            HttpResponseMessage response =
-                await _httpClient.GetAsync($"{attribute.EntityLogicalCollectionName}{options}");
+            HttpResponseMessage response = await _httpClient
+                .GetAsync($"{attribute.EntityLogicalCollectionName}{options}")
+                .ConfigureAwait(false);
 
             // parse web api response as stream
-            var content = await response.Content.ReadAsStreamAsync();
+            var content = await response.Content.ReadAsStreamAsync()
+                .ConfigureAwait(false);
 
             try
             {
                 // try parsing a collection of records from json
-                var multipleRecordsResponse =
-                    await JsonSerializer.DeserializeAsync<MultipleRecordsResponse<T>>(content);
+                var records = await JsonSerializer
+                    .DeserializeAsync<MultipleRecordsResponse<T>>(content)
+                    .ConfigureAwait(false);
 
                 // throw if the http request failed or the web api returned an error
                 response.EnsureSuccessStatusCode();
@@ -240,7 +254,7 @@ namespace Xrm.WebApi
                 // cannot be null here as the web api either returns results or
                 // an error. The latter is handled above by ensuring an http
                 // success status code and any json errors are catched, too.
-                return multipleRecordsResponse.Results!;
+                return records.Results!;
             }
             catch
             {
@@ -268,7 +282,8 @@ namespace Xrm.WebApi
             await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions
             {
                 IgnoreNullValues = true
-            });
+
+            }).ConfigureAwait(false);
 
             jsonStream.Position = 0;
 
