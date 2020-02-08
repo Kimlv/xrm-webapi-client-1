@@ -23,8 +23,7 @@ namespace Xrm.WebApi.Tests
         {
             var record = new Contact()
             {
-                FirstName = "Alfred",
-                LastName = "Quack"
+                LastName = "XrmWebApiClientTestUser"
             };
 
             var id = await _xrmWebApiClient.CreateAsync<Contact>(record);
