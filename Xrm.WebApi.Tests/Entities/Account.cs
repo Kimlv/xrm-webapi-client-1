@@ -19,7 +19,7 @@ namespace Xrm.WebApi.Tests.Entities
         /// <summary>
         /// The guid of the account.
         /// </summary>
-        [JsonPropertyName("Accountid")]
+        [JsonPropertyName("accountid")]
         public string? AccountId { get; set; }
     }
 }

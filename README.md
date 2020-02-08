@@ -79,7 +79,7 @@ List<Account> accounts = await client
 ## ToDo
 
 * [x] Add custom attributes for entity classes
-* [ ] Add method to create record
+* [x] Add method to create record
 * [ ] Add method to update record
 * [ ] Add method to delete record
 * [ ] Publish to NuGet
