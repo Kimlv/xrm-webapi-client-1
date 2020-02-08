@@ -145,6 +145,45 @@ namespace Xrm.WebApi
             }
         }
 
+        public async Task UpdateAsync<T>(Guid id, T record)
+        {
+            await UpdateAsync<T>(id.ToString(), record);
+        }
+
+        public async Task UpdateAsync<T>(string id, T record)
+        {
+            // ensure T is decorated with the required attribute in order to update records
+            var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
+
+            using var jsonStream = new MemoryStream();
+
+            // serialize record into json
+            await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions
+            {
+                IgnoreNullValues = true
+            });
+
+            jsonStream.Position = 0;
+
+            // create http request content from json
+            var content = new StreamContent(jsonStream);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            // query the web api
+            HttpResponseMessage response =
+                await _httpClient.PatchAsync($"{attribute.EntityLogicalCollectionName}({id})", content);
+
+            try
+            {
+                // throw if the http request failed or the web api returned an error
+                response.EnsureSuccessStatusCode();
+            }
+            catch
+            {
+                throw new XrmWebApiException(response);
+            }
+        }
+
         /// <summary>
         /// Retrieves a single entity record.
         /// </summary>
