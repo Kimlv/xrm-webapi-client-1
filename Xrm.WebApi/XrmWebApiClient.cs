@@ -114,7 +114,7 @@ namespace Xrm.WebApi
             using var jsonStream = new MemoryStream();
 
             // serialize record into json
-            await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions()
+            await JsonSerializer.SerializeAsync<T>(jsonStream, record, new JsonSerializerOptions
             {
                 IgnoreNullValues = true
             });

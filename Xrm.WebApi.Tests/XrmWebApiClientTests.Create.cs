@@ -21,7 +21,7 @@ namespace Xrm.WebApi.Tests
         [TestCategory("Positive")]
         public async Task CreateAsync_WithData_ShouldReturnResult()
         {
-            var record = new Contact()
+            var record = new Contact
             {
                 LastName = "XrmWebApiClientTestUser"
             };
@@ -41,7 +41,7 @@ namespace Xrm.WebApi.Tests
             {
                 var record = new Account();
 
-                var id = await _xrmWebApiClient.CreateAsync<Account>(record);
+                await _xrmWebApiClient.CreateAsync<Account>(record);
             });
         }
 
@@ -52,12 +52,12 @@ namespace Xrm.WebApi.Tests
         {
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
             {
-                var record = new Contact()
+                var record = new Contact
                 { 
                     PropertyShouldNotExist = "invalid_property"
                 };
 
-                var id = await _xrmWebApiClient.CreateAsync<Contact>(record);
+                await _xrmWebApiClient.CreateAsync<Contact>(record);
             });
         }
     }
