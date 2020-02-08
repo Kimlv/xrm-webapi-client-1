@@ -134,6 +134,18 @@ namespace Xrm.WebApi
             }
         }
 
+        /// <summary>
+        /// Updates an entity record.
+        /// </summary>
+        /// <typeparam name="T">The entity to update</typeparam>
+        /// <param name="id">The id of the record to update</param>
+        /// <param name="record">
+        /// An instance of the record to update where all
+        /// non-null properties will be updated
+        /// </param>
+        /// <remarks>
+        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/update-delete-entities-using-web-api"/>
+        /// </remarks>
         public async Task UpdateAsync<T>(string id, T record)
         {
             // ensure T is decorated with the required attribute in order to update records
@@ -161,7 +173,7 @@ namespace Xrm.WebApi
         /// Retrieves a single entity record.
         /// </summary>
         /// <typeparam name="T">The entity to query</typeparam>
-        /// <param name="id">Guid of the record to retrieve</param>
+        /// <param name="id">The id of the record to retrieve</param>
         /// <param name="options">OData system query options as supported by the Xrm Web Api</param>
         /// <returns>A record of <typeparamref name="T"/>.</returns>
         /// <remarks>
