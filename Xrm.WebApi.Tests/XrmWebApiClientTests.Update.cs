@@ -7,6 +7,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using System;
 using System.Threading.Tasks;
 
 using Xrm.WebApi.Exceptions;
@@ -19,7 +20,22 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Update")]
         [TestCategory("Positive")]
-        public async Task UpdateAsync_WithData_ShouldReturnWithSuccess()
+        public async Task UpdateAsync_WithValidDataAndGuid_ShouldReturnWithSuccess()
+        {
+            var id = new Guid(_recordId);
+
+            var record = new Contact
+            {
+                FirstName = "XrmWebApiClient_Update"
+            };
+
+            await _xrmWebApiClient.UpdateAsync<Contact>(id, record);
+        }
+
+        [TestMethod]
+        [TestCategory("Update")]
+        [TestCategory("Positive")]
+        public async Task UpdateAsync_WithValidData_ShouldReturnWithSuccess()
         {
             var record = new Contact
             {
