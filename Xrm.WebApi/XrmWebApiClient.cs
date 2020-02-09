@@ -144,6 +144,20 @@ namespace Xrm.WebApi
         /// Updates an entity record.
         /// </summary>
         /// <typeparam name="T">The entity to update</typeparam>
+        /// <param name="id">The <see cref="Guid"/> of the record to update</param>
+        /// <param name="record">
+        /// An instance of the record to update where all
+        /// non-null properties will be updated
+        /// </param>
+        public async Task UpdateAsync<T>(Guid id, T record)
+        {
+            await UpdateAsync<T>(id.ToString(), record).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Updates an entity record.
+        /// </summary>
+        /// <typeparam name="T">The entity to update</typeparam>
         /// <param name="id">The id of the record to update</param>
         /// <param name="record">
         /// An instance of the record to update where all
@@ -174,6 +188,19 @@ namespace Xrm.WebApi
             {
                 throw new XrmWebApiException(response);
             }
+        }
+
+        /// <summary>
+        /// Retrieves a single entity record.
+        /// </summary>
+        /// <typeparam name="T">The entity to query</typeparam>
+        /// <param name="id">The <see cref="Guid"/> of the record to retrieve</param>
+        /// <param name="options">OData system query options as supported by the Xrm Web Api</param>
+        /// <returns>A record of <typeparamref name="T"/>.</returns>
+        /// <remarks>
+        public async Task<T> RetrieveAsync<T>(Guid id, string options = "")
+        {
+            return await RetrieveAsync<T>(id.ToString(), options).ConfigureAwait(false);
         }
 
         /// <summary>
