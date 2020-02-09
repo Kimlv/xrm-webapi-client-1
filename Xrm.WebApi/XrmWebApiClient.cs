@@ -144,6 +144,20 @@ namespace Xrm.WebApi
         /// Updates an entity record.
         /// </summary>
         /// <typeparam name="T">The entity to update</typeparam>
+        /// <param name="id">The <see cref="Guid"/> of the record to update</param>
+        /// <param name="record">
+        /// An instance of the record to update where all
+        /// non-null properties will be updated
+        /// </param>
+        public async Task UpdateAsync<T>(Guid id, T record)
+        {
+            await UpdateAsync<T>(id.ToString(), record).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Updates an entity record.
+        /// </summary>
+        /// <typeparam name="T">The entity to update</typeparam>
         /// <param name="id">The id of the record to update</param>
         /// <param name="record">
         /// An instance of the record to update where all
