@@ -7,6 +7,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using System;
 using System.Threading.Tasks;
 
 using Xrm.WebApi.Exceptions;
@@ -79,7 +80,19 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Retrieve")]
         [TestCategory("Positive")]
-        public async Task RetrieveAsync_Record_ShouldReturnResult()
+        public async Task RetrieveAsync_WithValidGuid_ShouldReturnResult()
+        {
+            var id = new Guid(_recordId);
+
+            var contact = await _xrmWebApiClient.RetrieveAsync<Contact>(id);
+
+            Assert.IsNotNull(contact);
+        }
+
+        [TestMethod]
+        [TestCategory("Retrieve")]
+        [TestCategory("Positive")]
+        public async Task RetrieveAsync_WithValidId_ShouldReturnResult()
         {
             var contact = await _xrmWebApiClient.RetrieveAsync<Contact>(_recordId);
 
