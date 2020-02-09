@@ -194,6 +194,19 @@ namespace Xrm.WebApi
         /// Retrieves a single entity record.
         /// </summary>
         /// <typeparam name="T">The entity to query</typeparam>
+        /// <param name="id">The <see cref="Guid"/> of the record to retrieve</param>
+        /// <param name="options">OData system query options as supported by the Xrm Web Api</param>
+        /// <returns>A record of <typeparamref name="T"/>.</returns>
+        /// <remarks>
+        public async Task<T> RetrieveAsync<T>(Guid id, string options = "")
+        {
+            return await RetrieveAsync<T>(id.ToString(), options).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Retrieves a single entity record.
+        /// </summary>
+        /// <typeparam name="T">The entity to query</typeparam>
         /// <param name="id">The id of the record to retrieve</param>
         /// <param name="options">OData system query options as supported by the Xrm Web Api</param>
         /// <returns>A record of <typeparamref name="T"/>.</returns>
