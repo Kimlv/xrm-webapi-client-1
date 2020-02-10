@@ -19,7 +19,6 @@ namespace Xrm.WebApi.Tests
     {
         [TestMethod]
         [TestCategory("Delete")]
-        [TestCategory("Negative")]
         public async Task DeleteAsync_WithInvalidId_ShouldThrowXrmWebApiException()
         {
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>

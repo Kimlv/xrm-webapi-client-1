@@ -19,7 +19,6 @@ namespace Xrm.WebApi.Tests
     {
         [TestMethod]
         [TestCategory("Update")]
-        [TestCategory("Positive")]
         public async Task UpdateAsync_WithValidDataAndGuid_ShouldReturnWithSuccess()
         {
             var id = new Guid(_recordId);
@@ -34,7 +33,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Update")]
-        [TestCategory("Positive")]
         public async Task UpdateAsync_WithValidData_ShouldReturnWithSuccess()
         {
             var record = new Contact
@@ -47,7 +45,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Update")]
-        [TestCategory("Negative")]
         public async Task UpdateAsync_WithInvalidData_ShouldThrowXrmWebApiException()
         {
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
@@ -63,7 +60,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Update")]
-        [TestCategory("Negative")]
         public async Task UpdateAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
         {
             await Assert.ThrowsExceptionAsync<MissingAttributeException>(async () =>

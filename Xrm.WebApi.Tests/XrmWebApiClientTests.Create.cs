@@ -19,7 +19,6 @@ namespace Xrm.WebApi.Tests
     {
         [TestMethod]
         [TestCategory("Create")]
-        [TestCategory("Positive")]
         public async Task CreateAsync_WithData_ShouldReturnResult_ThenDeleteAsync()
         {
             var record = new Contact
@@ -37,7 +36,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Create")]
-        [TestCategory("Negative")]
         public async Task CreateAsync_WithInvalidData_ShouldThrowXrmWebApiException()
         {
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
@@ -53,7 +51,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Create")]
-        [TestCategory("Negative")]
         public async Task CreateAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
         {
             await Assert.ThrowsExceptionAsync<MissingAttributeException>(async () =>
