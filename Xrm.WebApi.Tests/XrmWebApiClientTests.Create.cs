@@ -20,7 +20,7 @@ namespace Xrm.WebApi.Tests
         [TestMethod]
         [TestCategory("Create")]
         [TestCategory("Positive")]
-        public async Task CreateAsync_WithData_ShouldReturnResult()
+        public async Task CreateAsync_WithData_ShouldReturnResult_ThenDeleteAsync()
         {
             var record = new Contact
             {
@@ -31,6 +31,8 @@ namespace Xrm.WebApi.Tests
 
             Assert.IsNotNull(id);
             Assert.IsInstanceOfType(id, typeof(Guid));
+
+            await _xrmWebApiClient.DeleteAsync<Contact>(id);
         }
 
         [TestMethod]
