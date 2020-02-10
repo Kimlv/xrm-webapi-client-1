@@ -23,24 +23,28 @@ namespace Xrm.WebApi.Tests
         {
             var id = new Guid(_recordId);
 
-            var record = new Contact
+            var record = await _xrmWebApiClient.RetrieveAsync<Contact>(_recordId, "?$select=lastname");
+
+            var update = new Contact
             {
-                FirstName = "XrmWebApiClient_Update"
+                FirstName = record.FirstName
             };
 
-            await _xrmWebApiClient.UpdateAsync<Contact>(id, record);
+            await _xrmWebApiClient.UpdateAsync<Contact>(id, update);
         }
 
         [TestMethod]
         [TestCategory("Update")]
         public async Task UpdateAsync_WithValidData_ShouldReturnWithSuccess()
         {
-            var record = new Contact
+            var record = await _xrmWebApiClient.RetrieveAsync<Contact>(_recordId, "?$select=lastname");
+
+            var update = new Contact
             {
-                FirstName = "XrmWebApiClient_Update"
+                FirstName = record.FirstName
             };
 
-            await _xrmWebApiClient.UpdateAsync<Contact>(_recordId, record);
+            await _xrmWebApiClient.UpdateAsync<Contact>(_recordId, update);
         }
 
         [TestMethod]
