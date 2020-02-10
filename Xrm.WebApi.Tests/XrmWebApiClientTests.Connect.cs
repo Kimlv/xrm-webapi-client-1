@@ -17,7 +17,6 @@ namespace Xrm.WebApi.Tests
     {
         [TestMethod]
         [TestCategory("Connect")]
-        [TestCategory("Positive")]
         public void ConnectAsync_WithValidConfiguration_ShouldReturnXrmWebApiClient()
         {
             Assert.IsNotNull(_xrmWebApiClient);
@@ -26,7 +25,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Connect")]
-        [TestCategory("Negative")]
         public async Task ConnectAsync_WhenClientIdIsInvalid_ShouldThrowHttpRequestException()
         {
             await Assert.ThrowsExceptionAsync<HttpRequestException>(async () =>
@@ -39,7 +37,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Connect")]
-        [TestCategory("Negative")]
         public async Task ConnectAsync_WhenClientSecretIsInvalid_ShouldThrowHttpRequestException()
         {
             await Assert.ThrowsExceptionAsync<HttpRequestException>(async () =>
@@ -52,7 +49,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Connect")]
-        [TestCategory("Negative")]
         public async Task ConnectAsync_WhenResourceUriIsInvalid_ShouldThrowHttpRequestException()
         {
             await Assert.ThrowsExceptionAsync<HttpRequestException>(async () =>
@@ -65,7 +61,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Connect")]
-        [TestCategory("Negative")]
         public async Task ConnectAsync_WhenTenantIsInvalid_ShouldThrowHttpRequestException()
         {
             await Assert.ThrowsExceptionAsync<HttpRequestException>(async () =>

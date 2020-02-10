@@ -19,7 +19,6 @@ namespace Xrm.WebApi.Tests
     {
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Positive")]
         public async Task RetrieveMultipleAsync_Top3_ShouldReturn3Results()
         {
             var options = "?$top=3";
@@ -30,7 +29,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Positive")]
         public async Task RetrieveMultipleAsync_SelectIdFromTop3_ShouldReturn3ResultsWithId()
         {
             var options = "?$select=contactid&$top=3";
@@ -44,7 +42,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Negative")]
         public async Task RetrieveMultipleAsync_WhenIdEqualsNonExistentId_ShouldReturnNoResults()
         {
             var options = "?$filter=contactid eq 00000000-0000-0000-0000-000000000000";
@@ -55,7 +52,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Negative")]
         public async Task RetrieveMultipleAsync_WithInvalidOptions_ShouldThrowXrmWebApiException()
         {
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
@@ -67,7 +63,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Negative")]
         public async Task RetrieveMultipleAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
         {
             await Assert.ThrowsExceptionAsync<MissingAttributeException>(async () =>
@@ -79,7 +74,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Positive")]
         public async Task RetrieveAsync_WithValidGuid_ShouldReturnResult()
         {
             var id = new Guid(_recordId);
@@ -91,7 +85,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Positive")]
         public async Task RetrieveAsync_WithValidId_ShouldReturnResult()
         {
             var contact = await _xrmWebApiClient.RetrieveAsync<Contact>(_recordId);
@@ -101,7 +94,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Positive")]
         public async Task RetrieveAsync_SelectIdFromRecord_ShouldReturnResultWithId()
         {
             var options = "?$select=contactid";
@@ -113,7 +105,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Negative")]
         public async Task RetrieveAsync_WhenIdEqualsNonExistentId_ShouldThrowXrmWebApiException()
         {
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
@@ -125,7 +116,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Negative")]
         public async Task RetrieveAsync_WithInvalidOptions_ShouldThrowXrmWebApiException()
         {
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
@@ -137,7 +127,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Retrieve")]
-        [TestCategory("Negative")]
         public async Task RetrieveAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
         {
             await Assert.ThrowsExceptionAsync<MissingAttributeException>(async () =>
