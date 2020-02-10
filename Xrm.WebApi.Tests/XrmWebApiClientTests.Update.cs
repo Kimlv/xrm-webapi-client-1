@@ -19,35 +19,36 @@ namespace Xrm.WebApi.Tests
     {
         [TestMethod]
         [TestCategory("Update")]
-        [TestCategory("Positive")]
         public async Task UpdateAsync_WithValidDataAndGuid_ShouldReturnWithSuccess()
         {
             var id = new Guid(_recordId);
 
-            var record = new Contact
+            var record = await _xrmWebApiClient.RetrieveAsync<Contact>(_recordId, "?$select=lastname");
+
+            var update = new Contact
             {
-                FirstName = "XrmWebApiClient_Update"
+                FirstName = record.FirstName
             };
 
-            await _xrmWebApiClient.UpdateAsync<Contact>(id, record);
+            await _xrmWebApiClient.UpdateAsync<Contact>(id, update);
         }
 
         [TestMethod]
         [TestCategory("Update")]
-        [TestCategory("Positive")]
         public async Task UpdateAsync_WithValidData_ShouldReturnWithSuccess()
         {
-            var record = new Contact
+            var record = await _xrmWebApiClient.RetrieveAsync<Contact>(_recordId, "?$select=lastname");
+
+            var update = new Contact
             {
-                FirstName = "XrmWebApiClient_Update"
+                FirstName = record.FirstName
             };
 
-            await _xrmWebApiClient.UpdateAsync<Contact>(_recordId, record);
+            await _xrmWebApiClient.UpdateAsync<Contact>(_recordId, update);
         }
 
         [TestMethod]
         [TestCategory("Update")]
-        [TestCategory("Negative")]
         public async Task UpdateAsync_WithInvalidData_ShouldThrowXrmWebApiException()
         {
             await Assert.ThrowsExceptionAsync<XrmWebApiException>(async () =>
@@ -63,7 +64,6 @@ namespace Xrm.WebApi.Tests
 
         [TestMethod]
         [TestCategory("Update")]
-        [TestCategory("Negative")]
         public async Task UpdateAsync_WhenEntityClassIsMissingAttributes_ShouldThrowMissingAttributeException()
         {
             await Assert.ThrowsExceptionAsync<MissingAttributeException>(async () =>

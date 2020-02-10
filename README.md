@@ -40,18 +40,58 @@ var credentials = new ClientCredentials("e8b89848-be54-4a01-b953-022a164016ce", 
 ```
 ```CSharp
 // Initialize and connect
-XrmWebApiClient client = await XrmWebApiClient
-    .ConnectAsync(serviceRootUri, credentials, tenant);
+var client = await XrmWebApiClient.ConnectAsync(serviceRootUri, credentials, tenant);
 ```
 
 ### Communicate with Dynamics 365
 
-Use OData system queries to communicate with the Xrm Web Api
+#### Create records
+
+Create a record and initialize its properties with one request.
 
 ```CSharp
-// Get all active accounts
+var contact = new Contact
+{
+    FirstName = "John",
+    LastName = "Doe"
+}
+
+var id = await client.CreateAsync<Contact>(contact);
+```
+
+#### Update records
+
+Update properties of a record.
+
+```CSharp
+var contact = new Contact
+{
+    FirstName = "Jane",
+    LastName = "Doe"
+}
+
+await client.UpdateAsync<Contact>(id, contact);
+```
+
+#### Retrieve records
+
+Use OData system queries to select properties and filter records before retrieval.
+
+```CSharp
+// Get all active accounts accountid only
 List<Account> accounts = await client
     .RetrieveMultipleAsync<Account>("?$select=accountid&$filter=statecode eq 0");
+
+// Get accountid of a specific record
+Account account = await client.RetrieveAsync<Account>(id, "?$select=accountid");
+```
+
+#### Delete records
+
+Delete records.
+
+```CSharp
+await client.DeleteAsync<Contact>(id);
 ```
 
 ## Build and Test
@@ -75,10 +115,3 @@ List<Account> accounts = await client
     }
 }
 ```
-
-## ToDo
-
-* [x] Add method to create record
-* [x] Add method to update record
-* [ ] Add method to delete record
-* [ ] Publish to NuGet
