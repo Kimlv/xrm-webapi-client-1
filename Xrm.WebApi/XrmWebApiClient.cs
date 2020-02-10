@@ -191,6 +191,45 @@ namespace Xrm.WebApi
         }
 
         /// <summary>
+        /// Deletes an entity record.
+        /// </summary>
+        /// <typeparam name="T">The entity to delete</typeparam>
+        /// <param name="id">The <see cref="Guid"/> of the record to delete</param>
+        public async Task DeleteAsync<T>(Guid id)
+        {
+            await DeleteAsync<T>(id.ToString()).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Deletes an entity record.
+        /// </summary>
+        /// <typeparam name="T">The entity to delete</typeparam>
+        /// <param name="id">The id of the record to delete</param>
+        /// <remarks>
+        /// see <a href="https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/update-delete-entities-using-web-api"/>
+        /// </remarks>
+        public async Task DeleteAsync<T>(string id)
+        {
+            // ensure T is decorated with the required attribute in order to update records
+            var attribute = TryResolveAttribute<EntityLogicalCollectionNameAttribute>(typeof(T));
+
+            // query the web api
+            HttpResponseMessage response = await _httpClient
+                .DeleteAsync($"{attribute.EntityLogicalCollectionName}({id})")
+                .ConfigureAwait(false);
+
+            try
+            {
+                // throw if the http request failed or the web api returned an error
+                response.EnsureSuccessStatusCode();
+            }
+            catch
+            {
+                throw new XrmWebApiException(response);
+            }
+        }
+
+        /// <summary>
         /// Retrieves a single entity record.
         /// </summary>
         /// <typeparam name="T">The entity to query</typeparam>
